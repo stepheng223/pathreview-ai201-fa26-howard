@@ -8,6 +8,14 @@
 
 **Tier:** [x] Tier 1  [ ] Tier 2  [ ] Tier 3
 
+The issue carries the `tier-1` label on GitHub. Tier 1 matches my
+current comfort level: this is my first contribution to the PathReview
+codebase, and while I'm comfortable with Python and have read through a
+few multi-module repos before, I haven't worked inside this project's
+agent/orchestration layer yet. Starting at Tier 1 lets me learn the
+project's conventions (tests, CI, PR template, commit style) on an
+issue whose fix is localized before I take on anything broader.
+
 **Problem summary:**
 The `Orchestrator` in `agent/orchestrator.py` creates one `ContextManager`
 in `__init__` and never resets it, and it also merges each run's output
