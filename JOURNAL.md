@@ -35,6 +35,36 @@ across profiles without cross-contamination.
 
 **Cohort ledger:** [ ] Issue added to cohort ledger
 
+## Unit 8 — Reproduction & solution planning
+
+**Reproduction commit link:** https://github.com/stepheng223/pathreview-ai201-fa26-howard/commit/d0cb48a
+
+**Reproduction summary:**
+Added three unit tests in `tests/unit/test_orchestrator_session_reset.py`
+that drive `Orchestrator.run` twice through a stand-in tool and assert
+the second call actually re-executes, that one profile's cached results
+don't leak into another's, and that `SessionStore.delete` is called at
+the start of each run. To prove these really pin the bug, I checked out
+`agent/orchestrator.py` and `agent/memory/context_manager.py` from the
+commit just before the fix (`a68a42a~1`) and ran pytest — all three
+tests failed exactly as issue #15 describes (the tool only ran once,
+the cache leaked across profiles, and `delete` was never called). With
+the fix in place, all three pass.
+
+**PLAN.md link:** https://github.com/stepheng223/pathreview-ai201-fa26-howard/blob/fix/15-orchestrator-session-reset/PLAN.md
+
+**Walkthrough video (recommended):**
+
+**Blockers or open questions:**
+- Concurrency is deliberately out of scope for this fix — `ContextManager`
+  isn't thread-safe and two concurrent `run` calls on the same
+  orchestrator could still interleave on the shared cache. Issue #15 is
+  about serial reuse; I'll note this in the PR description so reviewers
+  know it's an acknowledged gap, not an oversight.
+- The fix changes side-effect semantics for any caller that relied on
+  stale cross-run memoization. I grepped `agent/` and `api/` and found
+  no such caller, but I'll re-verify during PR review.
+
 ### "Is this right for me?" — scope reasoning
 
 - **Scope is bounded.** The fix touches three files named in the issue
