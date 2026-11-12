@@ -47,6 +47,10 @@ class ContextManager:
 
         return result
 
+    def clear(self) -> None:
+        """Drop every cached tool result."""
+        self.results.clear()
+
     def get_all_results(self) -> dict:
         """Get all cached results.
 

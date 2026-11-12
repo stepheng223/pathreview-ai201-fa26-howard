@@ -41,13 +41,17 @@ class Orchestrator:
         """
         logger.info("orchestrator_start", profile_id=profile_id)
 
+        # Start each run from a clean slate so results from a prior profile
+        # (or a prior review of this one) can't bleed through the memoization
+        # cache or the persisted session blob.
+        self.context_manager.clear()
+        if self.session_store:
+            self.session_store.delete(profile_id)
+
         # Build execution plan
         plan = self._build_plan(profile_data)
 
-        # Load previous session state if available
-        session_state = {}
-        if self.session_store:
-            session_state = self.session_store.get(profile_id) or {}
+        session_state: dict = {}
 
         # Execute plan
         results = {}
