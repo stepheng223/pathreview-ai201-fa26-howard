@@ -31,7 +31,7 @@ across profiles without cross-contamination.
 
 **Branch name:** fix/15-orchestrator-session-reset
 
-**Setup confirmation:** [ ] App runs locally at localhost:5173
+**Setup confirmation:** [x] App runs locally at localhost:5173
 
 **Cohort ledger:** [ ] Issue added to cohort ledger
 
